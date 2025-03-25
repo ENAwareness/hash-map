@@ -67,10 +67,45 @@ function HashMap(initialCapacity = 16, loadFactor = 0.75) {
     return null;
   }
 
+  function has(key) {
+    let index = hash(key);
+
+    if (buckets[index] === null) {
+      return false;
+    }
+
+    for (let pair of buckets[index]) {
+      if (pair.key === key) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  function remove(key) {
+    let index = hash(key);
+
+    if (buckets[index] === null) {
+      return false;
+    }
+
+    for (let i = 0; i < buckets[index].length; i++) {
+      if (buckets[index][i].key === key) {
+        buckets[index].splice(i, 1);
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   return {
     set,
     hash,
     get,
+    has,
+    remove,
     getCapacity: () => capacity,
     getSize: () => size,
     getBuckets: () => buckets
@@ -83,6 +118,8 @@ map.set('Alice', '12345');
 map.set('Rama', 'First value');
 map.set('Sita', 'Second value');
 
-console.log(map.get('Alice')); // 12345
+console.log(map.remove('Alice')); // 12345
 console.log(map.get('Rama')); // First value
 console.log(map.get('Bob')); // null
+
+console.log(map.getBuckets());
