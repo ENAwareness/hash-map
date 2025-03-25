@@ -51,9 +51,26 @@ function HashMap(initialCapacity = 16, loadFactor = 0.75) {
     }
   }
 
+  function get(key) {
+    let index = hash(key);
+
+    if (buckets[index] === null) {
+      return null;
+    }
+
+    for (let pair of buckets[index]) {
+      if (pair.key === key) {
+        return pair.value;
+      }
+    }
+
+    return null;
+  }
+
   return {
     set,
     hash,
+    get,
     getCapacity: () => capacity,
     getSize: () => size,
     getBuckets: () => buckets
@@ -62,12 +79,10 @@ function HashMap(initialCapacity = 16, loadFactor = 0.75) {
 
 //测试
 const map = HashMap();
-map.set('Carlos', 'I am the old value.');
-console.log(map.getBuckets()); // Carlos 存入
-map.set('Carlos', 'I am the new value.');
-console.log(map.getBuckets()); // Carlos 的值被更新
+map.set('Alice', '12345');
 map.set('Rama', 'First value');
 map.set('Sita', 'Second value');
-console.log(map.getSize());
-console.log(map.getCapacity());
-console.log(map.getBuckets());
+
+console.log(map.get('Alice')); // 12345
+console.log(map.get('Rama')); // First value
+console.log(map.get('Bob')); // null
