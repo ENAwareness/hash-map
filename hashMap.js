@@ -93,11 +93,67 @@ function HashMap(initialCapacity = 16, loadFactor = 0.75) {
     for (let i = 0; i < buckets[index].length; i++) {
       if (buckets[index][i].key === key) {
         buckets[index].splice(i, 1);
+        size--;
+
+        if (buckets[index].length === 0) {
+          buckets[index] = null;
+        }
         return true;
       }
     }
 
     return false;
+  }
+
+  function length() {
+    return size;
+  }
+
+  function clear() {
+    buckets = new Array(capacity).fill(null);
+    size = 0;
+  }
+
+  function keys() {
+    let keyArray = [];
+
+    for (let bucket of buckets) {
+      if (bucket !== null) {
+        for (let pair of bucket) {
+          keyArray.push(pair.key);
+        }
+      }
+    }
+
+    return keyArray;
+  }
+
+  function values() {
+    let valueArray = [];
+
+    for (let bucket of buckets) {
+      if (bucket !== null) {
+        for (let pair of bucket) {
+          valueArray.push(pair.value);
+        }
+      }
+    }
+
+    return valueArray;
+  }
+
+  function entries() {
+    let entryArray = [];
+
+    for (let bucket of buckets) {
+      if (bucket !== null) {
+        for (let pair of bucket) {
+          entryArray.push(pair);
+        }
+      }
+    }
+
+    return entryArray;
   }
 
   return {
@@ -106,6 +162,11 @@ function HashMap(initialCapacity = 16, loadFactor = 0.75) {
     get,
     has,
     remove,
+    length,
+    clear,
+    keys,
+    values,
+    entries,
     getCapacity: () => capacity,
     getSize: () => size,
     getBuckets: () => buckets
@@ -122,4 +183,6 @@ console.log(map.remove('Alice')); // 12345
 console.log(map.get('Rama')); // First value
 console.log(map.get('Bob')); // null
 
-console.log(map.getBuckets());
+console.log(map.length());
+console.log(map.keys());
+console.log(map.entries());
